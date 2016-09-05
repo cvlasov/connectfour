@@ -4,21 +4,24 @@ import java.util.Arrays;
 
 import connectfour.GameHelper.Piece;
 
+/**
+ *    The Connect Four board storing pieces represented by {@code GameHelper.Piece}
+ *    <p>
+ *    It is initialized with 6 rows and 7 columns in the constructor such that:
+ *    <ul>
+ *    <li>Top left is {@code board[0][0]}</li>
+ *    <li>Bottom left is {@code board[5][0]}</li>
+ *    <li>Top right is {@code board[0][6]}</li>
+ *    <li>Bottom right is {@code board[5][6]}</li>
+ *    </ul>
+ */
 public final class Board {
-	
-	/*
-	 *    The board has 6 rows and 7 columns
-	 *    Top left is board[0][0]
-	 *    Bottom left is board[5][0]
-	 *    Top right is board[0][6]
-	 *    Bottom right is board[5][6]
-	 */
 	
 	private GameHelper.Piece[][] board;
 	
 	public Board () {
 		board = new GameHelper.Piece[6][7];
-		// initialize all entries to NONE
+		// Initialize all entries to NONE
 		Arrays.fill(board, Piece.NONE);
 	}
 	
@@ -26,60 +29,68 @@ public final class Board {
 		return board;
 	}
 	
-	// the move is valid if the top of the column is empty
+	/**
+	 * Returns whether or not placing a piece in the given column is valid
+	 */
 	public boolean isValidMove (int columnNum) {
+		// Check if the top of the column is empty
 		return this.board[0][columnNum] == Piece.NONE;
 	}
 	
-	// places pieceType in columnNum, requires the move to be valid
-	public void placePiece(int columnNum, GameHelper.Piece pieceType) {
-		assert(isValidMove (columnNum)) : "invalid move";
-		// starts at the bottom and finds the first empty position
+	/**
+	 * Places a given piece type in a given column
+	 * <p>
+	 * <b>Note</b>: requires the move to be valid
+	 */
+	public int placePiece(int columnNum, GameHelper.Piece pieceType) {
+		// Start at the bottom and find the first empty position
 		for (int rowNum = 5; rowNum >= 0; rowNum--) {
 			if (board[rowNum][columnNum] == Piece.NONE) {
 				board[rowNum][columnNum] = pieceType;
-				return;
+				return rowNum;
 			}
-		}	
+		}
+		// Fail
+		return -1;
 	}
 	
-	// checks if the most recent addition to the board resulted in a win
-	public boolean hasWon (int columnOfPiece) {
+	/**
+	 * Checks if the most recent piece in the given column resulted in a win
+	 */
+	public boolean hasWon (int pieceColumn) {
 		
-		// gets row of piece (0-5)
-		int rowOfPiece = 0;
+		// Get row of the most recent piece in this column
+		int pieceRow = 0;
 		for (int rowNum = 0; rowNum < 6; rowNum++) {
-			if (board[rowNum][columnOfPiece] != Piece.NONE) {
-				rowOfPiece = rowNum;
+			if (board[rowNum][pieceColumn] != Piece.NONE) {
+				pieceRow = rowNum;
 			}
 		}
 		
-		// gets type of the most recently added piece
-		GameHelper.Piece pieceType = board[rowOfPiece][columnOfPiece];
+		// Get type of the most recently added piece
+		GameHelper.Piece pieceType = board[pieceRow][pieceColumn];
 		
-		// checks if piece has won vertically
-		if (rowOfPiece < 3 && board[rowOfPiece + 1][columnOfPiece] == pieceType &&
-			                  board[rowOfPiece + 2][columnOfPiece] == pieceType &&
-			                  board[rowOfPiece + 3][columnOfPiece] == pieceType) {
+		// Check if piece won vertically
+		if (pieceRow < 3 && board[pieceRow + 1][pieceColumn] == pieceType &&
+			                  board[pieceRow + 2][pieceColumn] == pieceType &&
+			                  board[pieceRow + 3][pieceColumn] == pieceType) {
 			return true;
 		}
 		
-		// checks if piece has won horizontally
+		// Check if piece won horizontally
 		for (int columnNum = 0; columnNum < 4; columnNum++) {
-			if (board[rowOfPiece][columnNum] == pieceType &&
-				board[rowOfPiece][columnNum + 1] == pieceType &&
-				board[rowOfPiece][columnNum + 2] == pieceType &&
-				board[rowOfPiece][columnNum + 3] == pieceType) {
+			if (board[pieceRow][columnNum] == pieceType &&
+				board[pieceRow][columnNum + 1] == pieceType &&
+				board[pieceRow][columnNum + 2] == pieceType &&
+				board[pieceRow][columnNum + 3] == pieceType) {
 				return true;
 			}
 		}
 
-		// checks if piece has won diagonally
+		// Check if piece won diagonally
 		
 		
-		// return false if the piece didn't win
+		// Return false if the piece didn't result in a win
 		return false;
-		
 	}
-
 }
