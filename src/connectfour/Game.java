@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 
 public final class Game {
 
-	// params representing game state
+	private boolean isComputerMove;
 	
 	public Game() {
 		JFrame frame = new JFrame("Connect Four");
@@ -29,10 +29,27 @@ public final class Game {
 		frame.setVisible(true);
 		
 		// initialize params: user goes first
+		
+		Board board = new Board();
+		isComputerMove = false;
+	}
+
+	/**
+	 * Completes a turn of the game
+	 */
+	public void gameMove() {
+		if (this.isComputerMove) {
+			computerMove();
+		}
+		else {
+			userMove();
+		}
+		// change value of isComputerMove by XOR'ing with true
+		isComputerMove ^= true;
 	}
 	
 	public void userMove() {}
-	
+		
 	public void computerMove() {}
 	
 	// ...

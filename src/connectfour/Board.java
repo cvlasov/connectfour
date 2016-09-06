@@ -9,10 +9,10 @@ import connectfour.GameHelper.Piece;
  *    <p>
  *    It is initialized with 6 rows and 7 columns in the constructor such that:
  *    <ul>
- *    <li>Top left is {@code board[0][0]}</li>
- *    <li>Bottom left is {@code board[5][0]}</li>
- *    <li>Top right is {@code board[0][6]}</li>
- *    <li>Bottom right is {@code board[5][6]}</li>
+ *      <li>Top left is {@code board[0][0]}</li>
+ *      <li>Bottom left is {@code board[5][0]}</li>
+ *      <li>Top right is {@code board[0][6]}</li>
+ *      <li>Bottom right is {@code board[5][6]}</li>
  *    </ul>
  */
 public final class Board {
