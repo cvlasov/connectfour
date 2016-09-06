@@ -55,17 +55,9 @@ public final class Board {
 	}
 	
 	/**
-	 * Checks if the most recent piece in the given column resulted in a win
+	 * Check if the most recent piece in the given column resulted in a win
 	 */
-	public boolean hasWon (int pieceColumn) {
-		
-		// Get row of the most recent piece in this column
-		int pieceRow = 0;
-		for (int rowNum = 0; rowNum < 6; rowNum++) {
-			if (board[rowNum][pieceColumn] != Piece.NONE) {
-				pieceRow = rowNum;
-			}
-		}
+	public boolean hasWon (int pieceRow, int pieceColumn) {
 		
 		// Get type of the most recently added piece
 		GameHelper.Piece pieceType = board[pieceRow][pieceColumn];
