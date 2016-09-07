@@ -27,6 +27,14 @@ public final class Board {
 		return board;
 	}
 	
+	public int getNumOfRows() {
+		return board.length;
+	}
+	
+	public int getNumOfCols() {
+		return board[0].length;
+	}
+	
 	/**
 	 * Returns whether or not placing a piece in the given column is valid
 	 */
