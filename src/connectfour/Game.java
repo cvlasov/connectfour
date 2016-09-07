@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 public final class Game {
 
 	private boolean isComputerMove;
+	private Board board;
 	
 	public Game() {
 		JFrame frame = new JFrame("Connect Four");
@@ -30,7 +31,7 @@ public final class Game {
 		
 		// initialize params: user goes first
 		
-		Board board = new Board();
+		board = new Board();
 		isComputerMove = false;
 	}
 
@@ -44,13 +45,24 @@ public final class Game {
 		else {
 			userMove();
 		}
-		// change value of isComputerMove by XOR'ing with true
+		
 		isComputerMove ^= true;
 	}
 	
 	public void userMove() {}
 		
-	public void computerMove() {}
-	
-	// ...
+	/**
+	 * Randomly selects a column where a valid move can be made and places piece there.
+	 */
+	public void computerMove() {
+		int columnNum = (int) Math.random() * board.getNumOfCols();
+		while (!board.isValidMove(columnNum)) {
+			columnNum = (int) Math.random() * board.getNumOfCols();
+		}
+		
+		int rowNum = board.placePiece(columnNum, GameHelper.Piece.COMPUTER);
+		if (board.hasWon(rowNum, columnNum)) {
+			// print something nice on the screen!
+		}
+	}
 }
