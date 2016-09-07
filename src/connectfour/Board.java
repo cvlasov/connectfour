@@ -2,8 +2,6 @@ package connectfour;
 
 import java.util.Arrays;
 
-import connectfour.GameHelper.Piece;
-
 /**
  *    The Connect Four board storing pieces represented by {@code GameHelper.Piece}
  *    <p>
@@ -22,10 +20,10 @@ public final class Board {
 	public Board () {
 		board = new GameHelper.Piece[6][7];
 		// Initialize all entries to NONE
-		Arrays.fill(board, Piece.NONE);
+		Arrays.fill(board, GameHelper.Piece.NONE);
 	}
 	
-	public Piece[][] getBoard() {
+	public GameHelper.Piece[][] getBoard() {
 		return board;
 	}
 	
@@ -34,7 +32,7 @@ public final class Board {
 	 */
 	public boolean isValidMove (int columnNum) {
 		// Check if the top of the column is empty
-		return this.board[0][columnNum] == Piece.NONE;
+		return this.board[0][columnNum] == GameHelper.Piece.NONE;
 	}
 	
 	/**
@@ -45,7 +43,7 @@ public final class Board {
 	public int placePiece(int columnNum, GameHelper.Piece pieceType) {
 		// Start at the bottom and find the first empty position
 		for (int rowNum = 5; rowNum >= 0; rowNum--) {
-			if (board[rowNum][columnNum] == Piece.NONE) {
+			if (board[rowNum][columnNum] == GameHelper.Piece.NONE) {
 				board[rowNum][columnNum] = pieceType;
 				return rowNum;
 			}
@@ -62,7 +60,7 @@ public final class Board {
 		// Get row of the most recent piece in this column
 		int pieceRow = 0;
 		for (int rowNum = 0; rowNum < 6; rowNum++) {
-			if (board[rowNum][pieceColumn] != Piece.NONE) {
+			if (board[rowNum][pieceColumn] != GameHelper.Piece.NONE) {
 				pieceRow = rowNum;
 			}
 		}
