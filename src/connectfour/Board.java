@@ -80,7 +80,27 @@ public final class Board {
 		}
 
 		// Check if piece won diagonally
+		for (int rowNum = 0; rowNum < 3; rowNum++) {
+			for (int columnNum = 0; columnNum < 4; columnNum++) {
+				if (board[rowNum][columnNum] == pieceType &&
+					board[rowNum + 1][columnNum + 1] == pieceType && 
+					board[rowNum + 1][columnNum + 1] == pieceType && 
+					board[rowNum + 1][columnNum + 1] == pieceType) {
+						return true;
+					}
+			}
+		}
 		
+		for (int rowNum = 3; rowNum < 6; rowNum++) {
+			for (int columnNum = 0; columnNum < 4; columnNum++) {
+				if (board[rowNum][columnNum] == pieceType &&
+					board[rowNum - 1][columnNum + 1] == pieceType && 
+					board[rowNum - 1][columnNum + 1] == pieceType && 
+					board[rowNum - 1][columnNum + 1] == pieceType) {
+						return true;
+					}
+			}
+		}
 		
 		// Return false if the piece didn't result in a win
 		return false;
