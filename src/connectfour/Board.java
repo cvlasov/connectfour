@@ -16,23 +16,21 @@ import java.util.Arrays;
 public final class Board {
 	
 	private GameHelper.Piece[][] board;
+	public static final int numOfRows = 6;
+	public static final int numOfCols = 7;
 	
 	public Board () {
-		board = new GameHelper.Piece[6][7];
+		board = new GameHelper.Piece[numOfRows][numOfCols];
 		// Initialize all entries to NONE
-		Arrays.fill(board, GameHelper.Piece.NONE);
+		// Not sure if Arrays.fill works on two-dimensional arrays
+		// Arrays.fill(board, GameHepler.Piece.None) gives an error
+		for (int i = 0; i < numOfRows; i++) {
+			Arrays.fill(board[0], GameHelper.Piece.NONE);		
+		}
 	}
 	
 	public GameHelper.Piece[][] getBoard() {
 		return board;
-	}
-	
-	public int getNumOfRows() {
-		return board.length;
-	}
-	
-	public int getNumOfCols() {
-		return board[0].length;
 	}
 	
 	/**
