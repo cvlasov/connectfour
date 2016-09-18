@@ -84,8 +84,8 @@ public final class Board {
 			for (int columnNum = 0; columnNum < 4; columnNum++) {
 				if (pieces[rowNum][columnNum] == pieceType &&
 					pieces[rowNum + 1][columnNum + 1] == pieceType && 
-					pieces[rowNum + 1][columnNum + 1] == pieceType && 
-					pieces[rowNum + 1][columnNum + 1] == pieceType) {
+					pieces[rowNum + 2][columnNum + 2] == pieceType && 
+					pieces[rowNum + 3][columnNum + 3] == pieceType) {
 						return true;
 					}
 			}
@@ -95,8 +95,8 @@ public final class Board {
 			for (int columnNum = 0; columnNum < 4; columnNum++) {
 				if (pieces[rowNum][columnNum] == pieceType &&
 					pieces[rowNum - 1][columnNum + 1] == pieceType && 
-					pieces[rowNum - 1][columnNum + 1] == pieceType && 
-					pieces[rowNum - 1][columnNum + 1] == pieceType) {
+					pieces[rowNum - 2][columnNum + 2] == pieceType && 
+					pieces[rowNum - 3][columnNum + 3] == pieceType) {
 						return true;
 					}
 			}
