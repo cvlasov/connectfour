@@ -12,6 +12,8 @@ import connectfour.GameHelper.Piece;
  *      <li>Top right is {@code board[0][6]}</li>
  *      <li>Bottom right is {@code board[5][6]}</li>
  *    </ul>
+ *    <p>
+ *    The number of rows (6) and columns (7) are constants defined in GameHelper.
  */
 public final class Board {
 	
@@ -30,18 +32,25 @@ public final class Board {
 	}
 	
 	/**
+	 * Initializes the board with the given Piece[][] {@code pieces}.
+	 */
+	public Board(Piece[][] pieces) {
+		this.pieces = pieces;
+	}
+	
+	/**
 	 * Returns whether or not placing a piece in the given column is valid
 	 */
-	public boolean isValidMove (int columnNum) {
+	public boolean isValidMove(int columnNum) {
 		return columnNum > -1
 				&& columnNum < GameHelper.NUM_OF_COLS
 				&& this.pieces[0][columnNum] == Piece.NONE;
 	}
 	
 	/**
-	 * Places a given piece type in a given column
+	 * Places a given piece type in a given column and returns the row where it is placed
 	 * <p>
-	 * <b>Note</b>: requires the move to be valid
+	 * <b>Note</b>: must be a valid move
 	 */
 	public int placePiece(int columnNum, Piece pieceType) {
 		// Start at the bottom and find the first empty position
@@ -51,15 +60,15 @@ public final class Board {
 				return rowNum;
 			}
 		}
-		return -1;
+		throw new IllegalArgumentException("Not possible to place piece in column " + columnNum);
 	}
 	
 	/**
 	 * Checks if the piece in the given row and column resulted in a win.
 	 */
-	public boolean hasWon (int pieceRow, int pieceColumn) {
+	public boolean hasWon(int pieceRow, int pieceColumn) {
 		
-		// Get type of the most recently added piece
+		// Get type of the piece at the given coordinates
 		Piece pieceType = pieces[pieceRow][pieceColumn];
 		
 		// Check if piece won vertically
@@ -84,19 +93,18 @@ public final class Board {
 			for (int columnNum = 0; columnNum < 4; columnNum++) {
 				if (pieces[rowNum][columnNum] == pieceType &&
 					pieces[rowNum + 1][columnNum + 1] == pieceType && 
-					pieces[rowNum + 1][columnNum + 1] == pieceType && 
-					pieces[rowNum + 1][columnNum + 1] == pieceType) {
+					pieces[rowNum + 2][columnNum + 2] == pieceType && 
+					pieces[rowNum + 3][columnNum + 3] == pieceType) {
 						return true;
 					}
 			}
 		}
-		
 		for (int rowNum = 3; rowNum < 6; rowNum++) {
 			for (int columnNum = 0; columnNum < 4; columnNum++) {
 				if (pieces[rowNum][columnNum] == pieceType &&
 					pieces[rowNum - 1][columnNum + 1] == pieceType && 
-					pieces[rowNum - 1][columnNum + 1] == pieceType && 
-					pieces[rowNum - 1][columnNum + 1] == pieceType) {
+					pieces[rowNum - 2][columnNum + 2] == pieceType && 
+					pieces[rowNum - 3][columnNum + 3] == pieceType) {
 						return true;
 					}
 			}
@@ -105,7 +113,25 @@ public final class Board {
 		return false;
 	}
 	
+	/**
+	 * Returns an identical copy of the board's Piece[][] {@code pieces}.
+	 */
 	public Piece[][] getPieces() {
-		return pieces;
+		Piece[][] copyOfPieces = new Piece[GameHelper.NUM_OF_ROWS][GameHelper.NUM_OF_COLS];
+		for (int row = 0; row < GameHelper.NUM_OF_ROWS; row++) {
+			for (int col = 0; col < GameHelper.NUM_OF_COLS; col++) {
+				copyOfPieces[row][col] = pieces[row][col];
+			}
+		}
+		return copyOfPieces;
+	}
+	
+	public boolean isFilled() {
+		for (int col = 0; col < GameHelper.NUM_OF_COLS; col++) {
+			if (pieces[0][col] == Piece.NONE) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

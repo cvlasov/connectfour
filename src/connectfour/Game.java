@@ -73,7 +73,7 @@ public final class Game {
 	 */
 	public void playGame() {
 		if (this.isComputerMove) {
-			computerMove();
+			computerMoveHard();
 			frame.getContentPane().addMouseListener(gamePanel);
 		}
 		else {
@@ -88,6 +88,11 @@ public final class Game {
 			return;
 		}
 		
+		if (board.isFilled()) {
+			System.out.println("Game over!!!");
+			return;
+		}
+		
 		isComputerMove = !isComputerMove;
 		playGame();
 	}
@@ -97,23 +102,26 @@ public final class Game {
 	 */
 	public void userMove() {
 		synchronized (gamePanel.userClicked) {
-			System.out.println("User move started");
-			try {
-				gamePanel.userClicked.wait(GameHelper.MOVE_TIMEOUT_MS);
-			} catch (InterruptedException e) {
-				// Thread should never be interrupted
-				System.out.println("Should not be interrupted");
-			}
+			int colClicked = -1;
 			
-			int colClicked = gamePanel.getUserClickCol();
-			
-			if (board.isValidMove(colClicked)) {
-				int row = board.placePiece(colClicked, Piece.PLAYER);
-				if (board.hasWon(row, colClicked)) {
-					gameWon = true;
+			while (!board.isValidMove(colClicked)) {
+				try {
+					gamePanel.userClicked.wait(GameHelper.MOVE_TIMEOUT_MS);
+				} catch (InterruptedException e) {
+					// Thread should never be interrupted
+					System.out.println("Should not be interrupted");
 				}
+				
+				colClicked = gamePanel.getUserClickCol();
 			}
-			System.out.println("User move finished :)");
+			
+			int row = board.placePiece(colClicked, Piece.PLAYER);
+			
+			if (board.hasWon(row, colClicked)) {
+				gameWon = true;
+			}
+			
+			System.out.println("User placed piece in column " + colClicked);
 		}
 	}
 		
@@ -123,14 +131,71 @@ public final class Game {
 	 * Strategy: randomly selects a column where a valid move can be made
 	 */
 	public void computerMove() {
-		System.out.println("Computer move started");
 		try {
 			Thread.sleep(GameHelper.COMPUTER_MOVE_WAIT_MS);
 		} catch (InterruptedException e) {}
 		
-		int columnNum = (int) (Math.random() * GameHelper.NUM_OF_COLS);
-		while (!board.isValidMove(columnNum)) {
+		int columnNum;
+		do {
 			columnNum = (int) (Math.random() * GameHelper.NUM_OF_COLS);
+		} while (!board.isValidMove(columnNum));
+		
+		int rowNum = board.placePiece(columnNum, Piece.COMPUTER);
+		
+		if (board.hasWon(rowNum, columnNum)) {
+			gameWon = true;
+		}
+		
+		System.out.println("Computer placed piece in column " + columnNum);
+	}
+	
+	/**
+	 * Makes computer move and returns whether or not resulted in a win.
+	 * <p>
+	 * Strategy:
+	 * <ol>
+	 * <li>If win is possible, place piece there
+	 * <li>If user can win next turn, place piece there
+	 * <li>Place piece randomly
+	 * </ol>
+	 */
+	public void computerMoveHard() {
+		// Make computer move more realistic
+		try {
+			Thread.sleep(GameHelper.COMPUTER_MOVE_WAIT_MS);
+		} catch (InterruptedException e) {}
+		
+		int columnNum = -1;
+		
+		// Check if computer can win
+		for (int col = 0; col < GameHelper.NUM_OF_COLS; col++) {
+			Board boardCopy = new Board(this.board.getPieces());
+			if (boardCopy.isValidMove(col)) {
+				int row = boardCopy.placePiece(col, Piece.COMPUTER);
+				if (boardCopy.hasWon(row, col)) {
+					columnNum = col;
+				}
+			}
+		}
+		
+		if (columnNum == -1) {
+			// Check if user can win
+			for (int col = 0; col < GameHelper.NUM_OF_COLS; col++) {
+				Board boardCopy = new Board(this.board.getPieces());
+				if (boardCopy.isValidMove(col)) {
+					int row = boardCopy.placePiece(col, Piece.PLAYER);
+					if (boardCopy.hasWon(row, col)) {
+						columnNum = col;
+					}
+				}
+			}
+		}
+		
+		if (columnNum == -1) {
+			// Randomly choose column
+			do {
+				columnNum = (int) (Math.random() * GameHelper.NUM_OF_COLS);
+			} while (!board.isValidMove(columnNum));
 		}
 		
 		int rowNum = board.placePiece(columnNum, Piece.COMPUTER);
@@ -139,7 +204,7 @@ public final class Game {
 			gameWon = true;
 		}
 		
-		System.out.println("Computer move finished :)");
+		System.out.println("Computer placed piece in column " + columnNum);
 	}
 	
 	//---------------------------------------------------------------------
