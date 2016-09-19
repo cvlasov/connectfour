@@ -29,7 +29,6 @@ public final class GameHelper {
 	 */
 	public static final int PIECE_BORDER = 5;
 	
-	public static final int MOVE_TIMEOUT_MS = 60000;
 	public static final int COMPUTER_MOVE_WAIT_MS = 1000;
 	
 	/**

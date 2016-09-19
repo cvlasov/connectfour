@@ -106,7 +106,7 @@ public final class Game {
 			
 			while (!board.isValidMove(colClicked)) {
 				try {
-					gamePanel.userClicked.wait(GameHelper.MOVE_TIMEOUT_MS);
+					gamePanel.userClicked.wait();
 				} catch (InterruptedException e) {
 					// Thread should never be interrupted
 					System.out.println("Should not be interrupted");
