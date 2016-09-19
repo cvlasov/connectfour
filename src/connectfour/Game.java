@@ -128,6 +128,30 @@ public final class Game {
 			Thread.sleep(GameHelper.COMPUTER_MOVE_WAIT_MS);
 		} catch (InterruptedException e) {}
 		
+		int columnNum;
+		do {
+			columnNum = (int) (Math.random() * GameHelper.NUM_OF_COLS);
+		} while (!board.isValidMove(columnNum));
+		
+		int rowNum = board.placePiece(columnNum, Piece.COMPUTER);
+		
+		if (board.hasWon(rowNum, columnNum)) {
+			gameWon = true;
+		}
+		
+		System.out.println("Computer move finished :)");
+	}
+	
+	/**
+	 * 
+	 * @author axelronquist
+	 *
+	 */
+	public void computerMoveHard() {
+		try {
+			Thread.sleep(GameHelper.COMPUTER_MOVE_WAIT_MS);
+		} catch (InterruptedException e) {}
+		
 		int columnNum = (int) (Math.random() * GameHelper.NUM_OF_COLS);
 		while (!board.isValidMove(columnNum)) {
 			columnNum = (int) (Math.random() * GameHelper.NUM_OF_COLS);
@@ -138,8 +162,6 @@ public final class Game {
 		if (board.hasWon(rowNum, columnNum)) {
 			gameWon = true;
 		}
-		
-		System.out.println("Computer move finished :)");
 	}
 	
 	//---------------------------------------------------------------------
